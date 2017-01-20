@@ -2712,6 +2712,7 @@ static void freestack(lua_State* L, lua_State* L1)
 
 static void f_luaopen(lua_State* L, void* ud)
 {
+    TString * tmp;
     global_State* g = (L->l_G);
     ((void)(ud));
     stack_init(L, L);
@@ -2720,7 +2721,10 @@ static void f_luaopen(lua_State* L, void* ud)
     luaS_resize(L, 32);
     luaT_init(L);
     luaX_init(L);
-    //((((luaS_newlstr(L,"""not enough memory",(sizeof("not enough memory")/sizeof(char))-1)))->tsv.marked)|=((1<<(5))));
+
+    tmp = luaS_newlstr(L,"not enough memory",(sizeof("not enough memory")/sizeof(char))-1);
+    tmp->tsv.marked |= 1<<5;
+
     g->GCthreshold = 4 * g->totalbytes;
 }
 
